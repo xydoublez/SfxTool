@@ -1,0 +1,5 @@
+G:\git\SfxTool\SfxTool\SfxPing\bin\Release\SfxPing.exe
+G:\git\SfxTool\SfxTool\SfxPing\bin\Release\SfxPing.pdb
+G:\git\SfxTool\SfxTool\SfxPing\obj\Release\SfxPing.csproj.CoreCompileInputs.cache
+G:\git\SfxTool\SfxTool\SfxPing\obj\Release\SfxPing.exe
+G:\git\SfxTool\SfxTool\SfxPing\obj\Release\SfxPing.pdb

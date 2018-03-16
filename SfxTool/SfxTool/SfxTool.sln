@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SfxTool", "SfxTool.csproj", "{2F479374-185B-4CAE-A1E5-0149C8084A9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SfxPing", "..\SfxPing\SfxPing.csproj", "{066C9284-2FD7-48DE-82FD-CE9240CD8243}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2F479374-185B-4CAE-A1E5-0149C8084A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F479374-185B-4CAE-A1E5-0149C8084A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F479374-185B-4CAE-A1E5-0149C8084A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066C9284-2FD7-48DE-82FD-CE9240CD8243}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066C9284-2FD7-48DE-82FD-CE9240CD8243}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066C9284-2FD7-48DE-82FD-CE9240CD8243}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066C9284-2FD7-48DE-82FD-CE9240CD8243}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

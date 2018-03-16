@@ -1,0 +1,13 @@
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.csprojResolveAssemblyReference.cache
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.Form1.resources
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.Properties.Resources.resources
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.Form1.sq-AL.resources
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.csproj.GenerateResource.Cache
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.csproj.CoreCompileInputs.cache
+G:\git\SfxTool\SfxTool\SfxTool\bin\Release\SfxTool.exe.config
+G:\git\SfxTool\SfxTool\SfxTool\bin\Release\SfxTool.exe
+G:\git\SfxTool\SfxTool\SfxTool\bin\Release\SfxTool.pdb
+G:\git\SfxTool\SfxTool\SfxTool\bin\Release\sq-AL\SfxTool.resources.dll
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\sq-AL\SfxTool.resources.dll
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.exe
+G:\git\SfxTool\SfxTool\SfxTool\obj\Release\SfxTool.pdb

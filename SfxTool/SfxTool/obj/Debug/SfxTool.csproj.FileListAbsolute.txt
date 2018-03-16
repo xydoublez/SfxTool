@@ -1,0 +1,13 @@
+G:\git\SfxTool\SfxTool\SfxTool\bin\Debug\SfxTool.exe
+G:\git\SfxTool\SfxTool\SfxTool\bin\Debug\SfxTool.pdb
+G:\git\SfxTool\SfxTool\SfxTool\bin\Debug\sq-AL\SfxTool.resources.dll
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.csprojResolveAssemblyReference.cache
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.Form1.resources
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.Properties.Resources.resources
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.Form1.sq-AL.resources
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.csproj.GenerateResource.Cache
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.csproj.CoreCompileInputs.cache
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\sq-AL\SfxTool.resources.dll
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.exe
+G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.pdb
+G:\git\SfxTool\SfxTool\SfxTool\bin\Debug\SfxTool.exe.config
