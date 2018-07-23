@@ -25,6 +25,11 @@ namespace SfxTool
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length == 2 && args[1] == "/h")
+            {
+                Thread.Sleep(60000);
+            }
             SetAutoRun();
             KillAll();
             Thread.Sleep(1000);
@@ -82,6 +87,7 @@ namespace SfxTool
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tool\\Fiddler2\\Fiddler.exe");
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             Process.Start(startInfo);
          
 

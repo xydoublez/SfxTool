@@ -1,0 +1,13 @@
+{
+  "User": {
+    "Id": 2,
+    "Username": "lizhiqiang",
+    "Name": "李志强",
+    "Email": "lizhiqiang@msunsoft.com",
+    "AvatarUrl": "https://www.gravatar.com/avatar/f4873215715cdfdd867fd04a981460d8?s=80&d=identicon",
+    "PrivateToken": "6edf726b1cf8b82bb22f7cee7a95a877a546a6f268ca4623e1ac3183f3b4a0c5",
+    "Host": "http://10.68.4.137",
+    "TwoFactorEnabled": false,
+    "ApiVersion": 3
+  }
+}
