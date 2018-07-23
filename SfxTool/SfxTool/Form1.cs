@@ -34,7 +34,7 @@ namespace SfxTool
             KillAll();
             Thread.Sleep(1000);
             startAll();
-            this.notifyIcon1.ShowBalloonTip(2000, "提示", "监控守护程序开始运行！", ToolTipIcon.Info);
+            this.notifyIcon1.ShowBalloonTip(2000, "提示12", "监控守护程序开始运行！", ToolTipIcon.Info);
             
 
         }
