@@ -1,0 +1,2 @@
+D:\360安全浏览器下载\Fiddler(VS2010调通源码)\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.csprojAssemblyReference.cache
+D:\360安全浏览器下载\Fiddler(VS2010调通源码)\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.csproj.CoreCompileInputs.cache
