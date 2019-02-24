@@ -102,5 +102,8 @@
     <Content Include="App_Readme\Elmah.txt" />
     <Content Include="icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\tool\Fiddler2\Scripts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
