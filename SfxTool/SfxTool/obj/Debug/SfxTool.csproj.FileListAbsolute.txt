@@ -11,3 +11,9 @@ G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\sq-AL\SfxTool.resources.dll
 G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.exe
 G:\git\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.pdb
 G:\git\SfxTool\SfxTool\SfxTool\bin\Debug\SfxTool.exe.config
+F:\gitlab\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.csprojAssemblyReference.cache
+F:\gitlab\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.Form1.resources
+F:\gitlab\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.Properties.Resources.resources
+F:\gitlab\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.Form1.sq-AL.resources
+F:\gitlab\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.csproj.GenerateResource.cache
+F:\gitlab\SfxTool\SfxTool\SfxTool\obj\Debug\SfxTool.csproj.CoreCompileInputs.cache
