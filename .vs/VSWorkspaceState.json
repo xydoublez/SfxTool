@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\SfxTool",
+    "\\SfxTool\\SfxTool"
   ],
-  "SelectedNode": "\\SfxTool",
+  "SelectedNode": "\\SfxTool\\SfxTool\\SfxTool.sln",
   "PreviewInSolutionExplorer": false
 }

@@ -3,3 +3,7 @@
 ################################################################################
 
 /SfxTool/SfxTool/.vs/SfxTool/v15/Server/sqlite3
+/SfxTool/SfxTool/testConsole/bin/Debug
+/SfxTool/SfxTool/testConsole/obj/Debug
+/SfxTool/testProxy/obj/Debug
+/SfxTool/SfxFiddlerCore/obj/Debug
