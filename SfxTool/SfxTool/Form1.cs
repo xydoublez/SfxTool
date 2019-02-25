@@ -193,5 +193,14 @@ namespace SfxTool
         {
             startAll();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SfxProductTimer.exe");
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            Process.Start(startInfo);
+        }
     }
 }

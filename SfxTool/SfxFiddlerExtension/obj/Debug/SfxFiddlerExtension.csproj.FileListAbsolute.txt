@@ -1,16 +1,2 @@
 D:\360安全浏览器下载\Fiddler(VS2010调通源码)\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.csprojAssemblyReference.cache
 D:\360安全浏览器下载\Fiddler(VS2010调通源码)\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.csproj.CoreCompileInputs.cache
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.csproj.CoreCompileInputs.cache
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\SfxFiddlerExtension.dll
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\SfxFiddlerExtension.pdb
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Fiddler.exe
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Xceed.Zip.v5.4.dll
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Xceed.FileSystem.v5.4.dll
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Xceed.Compression.Formats.v5.4.dll
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Xceed.Compression.v5.4.dll
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Fiddler.pdb
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Fiddler.exe.config
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.csproj.CopyComplete
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.dll
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\obj\Debug\SfxFiddlerExtension.pdb
-F:\gitlab\SfxTool\SfxTool\SfxFiddlerExtension\bin\Debug\Telerik.Analytics.dll

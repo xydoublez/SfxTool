@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testConsole", "testConsole\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SfxFiddlerExtension", "..\SfxFiddlerExtension\SfxFiddlerExtension.csproj", "{B79A8197-5192-4A1E-B6F9-5ED84AD534F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SfxProductTimer", "..\SfxProductTimer\SfxProductTimer.csproj", "{8F414B7C-9D32-4EFF-8848-A31ED7C25DC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{B04DB3D0-89CE-47DF-BB32-5CB233146CEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{B79A8197-5192-4A1E-B6F9-5ED84AD534F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B79A8197-5192-4A1E-B6F9-5ED84AD534F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B79A8197-5192-4A1E-B6F9-5ED84AD534F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F414B7C-9D32-4EFF-8848-A31ED7C25DC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F414B7C-9D32-4EFF-8848-A31ED7C25DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F414B7C-9D32-4EFF-8848-A31ED7C25DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F414B7C-9D32-4EFF-8848-A31ED7C25DC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B04DB3D0-89CE-47DF-BB32-5CB233146CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B04DB3D0-89CE-47DF-BB32-5CB233146CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B04DB3D0-89CE-47DF-BB32-5CB233146CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B04DB3D0-89CE-47DF-BB32-5CB233146CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

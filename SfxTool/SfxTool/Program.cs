@@ -15,6 +15,13 @@ namespace SfxTool
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            bool bNotRun = true;
+            System.Threading.Mutex mux = new System.Threading.Mutex(true, "sfxtool", out bNotRun);
+            if (!bNotRun)
+            {
+                MessageBox.Show("程序已经运行!请从托盘处打开程序！");
+                Environment.Exit(0);
+            }
             Application.Run(new Form1());
         }
     }
