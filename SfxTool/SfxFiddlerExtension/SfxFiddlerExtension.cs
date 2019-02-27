@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
@@ -67,9 +68,11 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
         FiddlerApplication.Log.LogString("AutoTamperResponseAfterSfxFiddler自定义插件");
         var info = getInfo(s);
         info = "SessionId:\t" + s.id + "\r\n" + info;
+        info += "url:" + s.url;
         FiddlerApplication.Log.LogString(info);
         createTable();
         insertTable(s);
+        SendMessage(s);
     }
     
     public void OnBeforeReturningError(Session oSession)
@@ -187,6 +190,26 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
             }
         }
 
+    }
+    private void SendMessage(Session session)
+    {
+        try
+        {
+            var keyword = "/MZYSZ/Default.aspx?userSysId=";
+            
+            if (session.uriContains(keyword))
+            {
+                var info = keyword + "|";
+                info += session.Timers.ServerDoneResponse.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                using(TcpClient client = new TcpClient("127.0.0.1", 63351))
+                {
+                    client.Client.Send(System.Text.Encoding.UTF8.GetBytes(info));
+                }
+            }
+        }catch(Exception ex)
+        {
+            FiddlerApplication.Log.LogString(ex.Message+ex.StackTrace);
+        }
     }
             
 }

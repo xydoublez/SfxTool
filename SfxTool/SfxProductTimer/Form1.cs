@@ -44,6 +44,7 @@ namespace SfxProductTimer
             
             createTable2();
             LoadRules();
+            webSocketServer1.Listen(63351);
         }
         private void createTable2()
         {
@@ -166,6 +167,11 @@ namespace SfxProductTimer
             //    }
             //}
 
+        }
+
+        private void webSocketServer1_OnReceiveMsg(string msg)
+        {
+            log(msg, "接收到信息");
         }
     }
 

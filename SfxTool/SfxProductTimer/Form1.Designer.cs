@@ -31,6 +31,7 @@
             this.cbRules = new System.Windows.Forms.ComboBox();
             this.rbResult = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.webSocketServer1 = new GhostWinterCaptureImage.WebSocketServer();
             this.SuspendLayout();
             // 
             // cbRules
@@ -59,11 +60,21 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // webSocketServer1
+            // 
+            this.webSocketServer1.Location = new System.Drawing.Point(209, 397);
+            this.webSocketServer1.Name = "webSocketServer1";
+            this.webSocketServer1.Size = new System.Drawing.Size(75, 23);
+            this.webSocketServer1.TabIndex = 3;
+            this.webSocketServer1.Text = "webSocketServer1";
+            this.webSocketServer1.OnReceiveMsg += new GhostWinterCaptureImage.WebSocketServer.MessageHander(this.webSocketServer1_OnReceiveMsg);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.webSocketServer1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.rbResult);
             this.Controls.Add(this.cbRules);
@@ -80,6 +91,7 @@
         private System.Windows.Forms.ComboBox cbRules;
         private System.Windows.Forms.RichTextBox rbResult;
         private System.Windows.Forms.Button button1;
+        private GhostWinterCaptureImage.WebSocketServer webSocketServer1;
     }
 }
 
