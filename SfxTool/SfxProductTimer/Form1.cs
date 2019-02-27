@@ -1,8 +1,10 @@
 ﻿using OpenQA.Selenium.IE;
+using SQLite.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,7 +14,8 @@ namespace SfxProductTimer
 {
     public partial class Form1 : Form
     {
-        InternetExplorerDriver ie;
+        string dataSource = "data source=SfxFiddlerRule.db";
+        string HISIP = System.Configuration.ConfigurationManager.AppSettings["HISIP"];
         public Form1()
         {
             InitializeComponent();
@@ -20,7 +23,8 @@ namespace SfxProductTimer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            test("http://10.68.4.118/MZSK/Cash/Cash.aspx?popedomSystemId=1&userSysId=109101969&workstationId=-1&tsCheck=63686697515.732&rtime=1551071925304", "http://10.68.4.118/MZSK/AjaxServer/ReCash.aspx?para=GetAmount&userSysId=109101969&workstationId=-1&popedomSystemId=1&ie6=sb0.352377044457666");
+            var rule = cbRules.SelectedItem as SfxFiddlerRule;
+            test(rule.StartUrl,rule.EndUrl);
         }
         bool flagQuit = false;
        private void test(string initUrl,string finishUrl)
@@ -37,7 +41,74 @@ namespace SfxProductTimer
         }
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+            createTable2();
+            LoadRules();
+        }
+        private void createTable2()
+        {
+            using (var conn = new SQLiteConnection(dataSource))
+            {
+                using (var cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    var sh = new SQLiteHelper(cmd);
+                    if (!sh.ExistsTable("SfxFiddlerRule"))
+                    {
 
+                        var tb = new SQLiteTable("SfxFiddlerRule");
+                        tb.Columns.Add(new SQLiteColumn("Id", true));
+                        tb.Columns.Add(new SQLiteColumn("RuleName", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("StartUrl", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("EndUrl", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("StartKeyword", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("EndKeyword", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("Module", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("Version", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("InsertTime", ColType.DateTime));
+                        sh.CreateTable(tb);
+                        conn.Close();
+                    }
+                }
+            }
+        }
+        private void LoadRules()
+        {
+            using (var conn = new SQLiteConnection(dataSource))
+            {
+                using (var cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    var sh = new SQLiteHelper(cmd);
+                    var dt = sh.Select("select * from SfxFiddlerRule");
+                    List<SfxFiddlerRule> list = new List<SfxFiddlerRule>();
+                    foreach(DataRow row in dt.Rows)
+                    {
+                        SfxFiddlerRule rule = new SfxFiddlerRule();
+                        rule.Id = int.Parse(row["Id"].ToString());
+                        rule.RuleName = row["RuleName"].ToString();
+                        rule.StartUrl = row["StartUrl"].ToString();
+                        rule.EndUrl = row["EndUrl"].ToString();
+                        rule.Module = row["Module"].ToString();
+                        rule.Version = row["Version"].ToString();
+                        rule.InsertTime = DateTime.Parse(row["InsertTime"].ToString());
+                        rule = replaceIP(rule);
+                        list.Add(rule);
+
+                    }
+                    cbRules.DataSource = list;
+                    cbRules.DisplayMember = "RuleName";
+                    cbRules.ValueMember = "RuleName";
+                }
+            }
+        }
+        private SfxFiddlerRule replaceIP(SfxFiddlerRule rule)
+        {
+            rule.StartUrl = rule.StartUrl.Replace("{HISIP}", HISIP);
+            rule.EndUrl = rule.EndUrl.Replace("{HISIP}", HISIP);
+            return rule;
         }
         private InternetExplorerDriver openUrl(string url)
         {
@@ -46,7 +117,7 @@ namespace SfxProductTimer
             InternetExplorerDriver ie = new InternetExplorerDriver(options);
             {
                 System.Environment.SetEnvironmentVariable("webdriver.ie.driver", String.Format(@"{0}\IEDriverServer.exe", System.IO.Directory.GetCurrentDirectory()));
-                ie.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(5);
+                //ie.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(5);
 
             }
         
@@ -54,5 +125,61 @@ namespace SfxProductTimer
             return ie;
             
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void log(string messgage,string action)
+        {
+            string info = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + action + "\r\n";
+            info += messgage + "\r\n";
+            this.Invoke(new Action(() => {
+                this.rbResult.AppendText(info);
+            }));
+        }
+        private void insertTable(SfxFiddlerRule rule)
+        {
+
+            //var dic = new Dictionary<string, object>() {
+            //    { "url" ,session.fullUrl },
+            //    { "referer", session.oRequest["referer"] },
+            //    { "status", session.responseCode},
+            //    { "duration", (int)duration },
+            //    { "FiddlerId", session.id },
+            //    { "requestContent", session.GetRequestBodyAsString() },
+            //    { "responseContent", "" },
+            //    { "keyword", "" },
+            //    { "insertTime", DateTime.Now },
+            //    { "ServerGotRequestTime",session.Timers.ServerGotRequest },
+            //    { "ServerDoneResponseTime",session.Timers.ServerDoneResponse }
+            //};
+            //using (var conn = new SQLiteConnection(dataSource))
+            //{
+            //    using (var cmd = new SQLiteCommand())
+            //    {
+            //        cmd.Connection = conn;
+            //        conn.Open();
+            //        var sh = new SQLiteHelper(cmd);
+            //        sh.Insert("", dic);
+            //    }
+            //}
+
+        }
+    }
+
+    public class SfxFiddlerRule
+    {
+        public  int Id { get; set; }
+        public string RuleName { get; set; }
+        public string StartUrl { get; set; }
+        public string EndUrl { get; set; }
+        public string StartKeyword { get; set; }
+        public string EndKeyword { get; set; }
+        public string Module { get; set; }
+        public string Version { get; set; }
+        public DateTime InsertTime { get; set; }
+
     }
 }

@@ -411,7 +411,22 @@ namespace SQLite.Utils {
             cmd.CommandText = string.Format("drop table if exists `{0}`", table);
             cmd.ExecuteNonQuery();
         }
-
+      
+        public  bool ExistsTable(string table)
+        {
+            bool result = false;
+            string sql = "select sql  from sqlite_master where name='" + table + "' and type='table'";
+            DataTable dt = Select(sql);
+            if (dt.Rows.Count == 0)
+            {
+                result = false;
+            }
+            else
+            {
+                result = true;
+            }
+            return result;
+        }
         public void UpdateTableStructure(string targetTable, SQLiteTable newStructure) {
             newStructure.TableName = targetTable + "_temp";
             CreateTable(newStructure);

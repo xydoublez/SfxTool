@@ -1,12 +1,20 @@
 ﻿using Fiddler;
+using SQLite.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+
 public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fiddler won't see it!
 {
     string sUserAgent = "";
-
+    static string databaseName = "SfxFiddlerData.db";
+    static string database = String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), databaseName);
+    static string dataSource = "data source=" + database;
+    static string tableName = "SfxFiddlerLog";
     public SfxFiddlerExtension()
     {
         /* NOTE: It's possible that Fiddler UI isn't fully loaded yet, so don't add any UI in the constructor.
@@ -17,7 +25,17 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
         sUserAgent = "SfxFiddlerExtension";
     }
 
-    public void OnLoad() { /* Load your UI here */ }
+    public void OnLoad() { /* Load your UI here */
+        try
+        {
+            ThreadPool.SetMaxThreads(4, 4);
+            
+
+        }catch(Exception ex)
+        {
+            FiddlerApplication.Log.LogString("SfxFiddler自定义插件出错！" + ex.Message + ex.StackTrace);
+        }
+    }
     public void OnBeforeUnload() { }
 
     public void AutoTamperRequestBefore(Session oSession)
@@ -34,16 +52,24 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
     {
         try
         {
-            FiddlerApplication.Log.LogString("AutoTamperResponseAfterSfxFiddler自定义插件");
-            var info = getInfo(oSession);
-            info = "SessionId:\t" + oSession.id + "\r\n" + info;
-            FiddlerApplication.Log.LogString(info);
+            ThreadPool.QueueUserWorkItem(AfterResponseExec, oSession);
+            //AfterResponseExec(oSession);
         }
         catch (Exception ex)
         {
             FiddlerApplication.Log.LogString("SfxFiddler自定义插件出错！" + ex.Message + ex.StackTrace);
         }
 
+    }
+    private void AfterResponseExec(object session)
+    {
+        var s = (Session)session;
+        FiddlerApplication.Log.LogString("AutoTamperResponseAfterSfxFiddler自定义插件");
+        var info = getInfo(s);
+        info = "SessionId:\t" + s.id + "\r\n" + info;
+        FiddlerApplication.Log.LogString(info);
+        createTable();
+        insertTable(s);
     }
     
     public void OnBeforeReturningError(Session oSession)
@@ -71,19 +97,20 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
                      session.Timers.ServerDoneResponse,
                      session.Timers.ClientBeginResponse,
                      session.Timers.ClientDoneResponse,
-                     getOverallElapsed(session)
+                     string.Format("\t请求耗时:\t{0:h\\:mm\\:ss\\.fff}\r\n", getOverallElapsed(session))
                 });
 
 
     }
-    private string getOverallElapsed(Session session)
+    private TimeSpan getOverallElapsed(Session session)
     {
-        TimeSpan timeSpan = session.Timers.ServerDoneResponse - session.Timers.ClientDoneRequest;
+        TimeSpan timeSpan = session.Timers.ServerDoneResponse - session.Timers.ServerGotRequest;
         if (timeSpan > TimeSpan.Zero)
         {
-            return string.Format("\t请求耗时:\t{0:h\\:mm\\:ss\\.fff}\r\n", timeSpan);
+            //return string.Format("\t请求耗时:\t{0:h\\:mm\\:ss\\.fff}\r\n", timeSpan);
+            return timeSpan;
         }
-        return string.Empty;
+        return TimeSpan.Zero;
     }
 
     public void OnPeekAtResponseHeaders(Session oSession)
@@ -100,5 +127,67 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
             FiddlerApplication.Log.LogString("SfxFiddler自定义插件出错！" + ex.Message + ex.StackTrace);
         }
     }
+    private void createTable()
+    {
+        using (var conn = new SQLiteConnection(dataSource))
+        {
+            using (var cmd = new SQLiteCommand())
+            {
+                cmd.Connection = conn;
+                conn.Open();
+                var sh = new SQLiteHelper(cmd);
+                if (!sh.ExistsTable(tableName))
+                {
+
+                    var tb = new SQLiteTable(tableName);
+                    tb.Columns.Add(new SQLiteColumn("id", true));
+                    tb.Columns.Add(new SQLiteColumn("url", ColType.Text));
+                    tb.Columns.Add(new SQLiteColumn("referer", ColType.Text));
+                    tb.Columns.Add(new SQLiteColumn("status", ColType.Integer));
+                    tb.Columns.Add(new SQLiteColumn("duration", ColType.Integer));
+                    tb.Columns.Add(new SQLiteColumn("FiddlerId", ColType.Integer));
+                    tb.Columns.Add(new SQLiteColumn("requestContent", ColType.Text));
+                    tb.Columns.Add(new SQLiteColumn("responseContent", ColType.Text));
+                    tb.Columns.Add(new SQLiteColumn("keyword", ColType.Text));
+                    tb.Columns.Add(new SQLiteColumn("insertTime", ColType.DateTime));
+                    tb.Columns.Add(new SQLiteColumn("ServerGotRequestTime", ColType.DateTime));
+                    tb.Columns.Add(new SQLiteColumn("ServerDoneResponseTime", ColType.DateTime));
+                    sh.CreateTable(tb);
+                    conn.Close();
+                }
+            }
+        }
+    }
+    
+    private void insertTable(Session session)
+    {
+
+        var duration = getOverallElapsed(session).TotalMilliseconds;
+        var dic = new Dictionary<string, object>() {
+                { "url" ,session.fullUrl },
+                { "referer", session.oRequest["referer"] },
+                { "status", session.responseCode},
+                { "duration", (int)duration },
+                { "FiddlerId", session.id },
+                { "requestContent", session.GetRequestBodyAsString() },
+                { "responseContent", "" },
+                { "keyword", "" },
+                { "insertTime", DateTime.Now },
+                { "ServerGotRequestTime",session.Timers.ServerGotRequest },
+                { "ServerDoneResponseTime",session.Timers.ServerDoneResponse }
+            };
+        using (var conn = new SQLiteConnection(dataSource))
+        {
+            using (var cmd = new SQLiteCommand())
+            {
+                cmd.Connection = conn;
+                conn.Open();
+                var sh = new SQLiteHelper(cmd);
+                sh.Insert(tableName, dic);
+            }
+        }
+
+    }
+            
 }
 

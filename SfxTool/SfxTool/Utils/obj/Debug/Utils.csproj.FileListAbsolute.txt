@@ -3,7 +3,6 @@ F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\bin\Debug\Utils.pdb
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\bin\Debug\System.Data.SQLite.dll
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\bin\Debug\System.Data.SQLite.xml
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\bin\Debug\System.Data.SQLite.dll.config
-F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.csprojAssemblyReference.cache
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.csproj.CoreCompileInputs.cache
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.csproj.CopyComplete
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.dll
