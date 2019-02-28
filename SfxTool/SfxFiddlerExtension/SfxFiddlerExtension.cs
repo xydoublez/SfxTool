@@ -69,6 +69,7 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
         var info = getInfo(s);
         info = "SessionId:\t" + s.id + "\r\n" + info;
         info += "url:" + s.url;
+        info += "processId:" + s.LocalProcessID + "processName:" + s.LocalProcess;
         FiddlerApplication.Log.LogString(info);
         createTable();
         insertTable(s);
@@ -153,6 +154,8 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
                     tb.Columns.Add(new SQLiteColumn("responseContent", ColType.Text));
                     tb.Columns.Add(new SQLiteColumn("keyword", ColType.Text));
                     tb.Columns.Add(new SQLiteColumn("insertTime", ColType.DateTime));
+                    tb.Columns.Add(new SQLiteColumn("processName", ColType.Text));
+                    tb.Columns.Add(new SQLiteColumn("processId", ColType.Integer));
                     tb.Columns.Add(new SQLiteColumn("ServerGotRequestTime", ColType.DateTime));
                     tb.Columns.Add(new SQLiteColumn("ServerDoneResponseTime", ColType.DateTime));
                     sh.CreateTable(tb);
@@ -177,7 +180,9 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
                 { "keyword", "" },
                 { "insertTime", DateTime.Now },
                 { "ServerGotRequestTime",session.Timers.ServerGotRequest },
-                { "ServerDoneResponseTime",session.Timers.ServerDoneResponse }
+                { "ServerDoneResponseTime",session.Timers.ServerDoneResponse },
+                {"processName",session.LocalProcess },
+                {"processId",session.LocalProcessID }
             };
         using (var conn = new SQLiteConnection(dataSource))
         {
@@ -199,9 +204,11 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
             
             if (session.uriContains(keyword))
             {
-                var info = keyword + "|";
-                info += session.Timers.ServerDoneResponse.ToString("yyyy-MM-dd HH:mm:ss.fff");
-                using(TcpClient client = new TcpClient("127.0.0.1", 63351))
+                var info = keyword ;
+                info += "|"+session.Timers.ServerDoneResponse.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                info += "|" + session.LocalProcess;
+                info += "|" + session.LocalProcessID;
+                using (TcpClient client = new TcpClient("127.0.0.1", 63351))
                 {
                     client.Client.Send(System.Text.Encoding.UTF8.GetBytes(info));
                 }

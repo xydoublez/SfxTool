@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,7 +15,7 @@ namespace SfxProductTimer
 {
     public partial class Form1 : Form
     {
-        string dataSource = "data source=SfxFiddlerRule.db";
+        string dataSource = "data source=" + String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "SfxFiddlerRule.db");
         string HISIP = System.Configuration.ConfigurationManager.AppSettings["HISIP"];
         public Form1()
         {
@@ -37,6 +38,7 @@ namespace SfxProductTimer
             if (flagQuit)
             {
                 ie.Quit();
+                ie.
             }
         }
         private void Form1_Load(object sender, EventArgs e)
