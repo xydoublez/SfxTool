@@ -234,7 +234,7 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
     }
     private List<SfxFiddlerRule> GetRules()
     {
-        using (var conn = new SQLiteConnection(dataSource))
+        using (var conn = new SQLiteConnection(ruleSource))
         {
             using (var cmd = new SQLiteCommand())
             {

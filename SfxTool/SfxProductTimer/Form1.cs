@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -25,8 +26,15 @@ namespace SfxProductTimer
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //kill_IE();
             var rule = cbRules.SelectedItem as SfxFiddlerRule;
-            test(rule.StartUrl, rule.EndUrl);
+            try
+            {
+                test(rule.StartUrl, rule.EndUrl);
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace);
+            }
         }
         bool flagQuit = false;
         private void test(string initUrl, string finishUrl)
@@ -134,6 +142,7 @@ namespace SfxProductTimer
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            kill_IE();
             Environment.Exit(0);
         }
 
@@ -177,8 +186,13 @@ namespace SfxProductTimer
 
         private void webSocketServer1_OnReceiveMsg(string msg)
         {
-
-            procMsg(msg);
+            try
+            {
+                procMsg(msg);
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void procMsg(string msg)
         {
@@ -190,16 +204,16 @@ namespace SfxProductTimer
             var startKeyword = arr[4];
             var endTime = DateTime.Parse(ServerDoneResponse);
             var startTime = DateTime.Now;
-            using (var conn = new SQLiteConnection(dataSource))
+            using (var conn = new SQLiteConnection(logDataSource))
             {
                 using (var cmd = new SQLiteCommand())
                 {
                     cmd.Connection = conn;
                     conn.Open();
                     var sh = new SQLiteHelper(cmd);
-                    var dt = sh.Select("select ServerGotRequestTime from SfxFiddlerLog where LocalProcess='"
-                        + LocalProcess + "' and LocalProcessID='" + LocalProcessID 
-                        + "' and StartKeyWord='" + startKeyword+ "'  order by insertTime desc,id limit 0,1");
+                    var dt = sh.Select("select ServerGotRequestTime from SfxFiddlerLog where processName='"
+                        + LocalProcess + "' and url like'%" + startKeyword + "%'  order by insertTime desc,id limit 0,1");
+
                     startTime = DateTime.Parse(dt.Rows[0]["ServerGotRequestTime"].ToString());
                    
                 }
@@ -207,6 +221,20 @@ namespace SfxProductTimer
             var duration = endTime - startTime;
             var info = string.Format("\t请求耗时:\t{0:h\\:mm\\:ss\\.fff}\r\n", duration);
             log(info, "检测结果：");
+        }
+        private void kill_IE()
+        {
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = @"C:\Windows\System32\taskkill.exe";
+                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                startInfo.Arguments = "/im IEDriverServer.exe /t /f";
+                Process.Start(startInfo);
+            }catch
+            {
+
+            }
         }
     }
 

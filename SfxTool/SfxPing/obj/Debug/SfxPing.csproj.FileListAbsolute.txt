@@ -3,3 +3,9 @@ G:\git\SfxTool\SfxTool\SfxPing\bin\Debug\SfxPing.pdb
 G:\git\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.csproj.CoreCompileInputs.cache
 G:\git\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.exe
 G:\git\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.pdb
+F:\gitlab\SfxTool\SfxTool\SfxPing\bin\Debug\SfxPing.exe
+F:\gitlab\SfxTool\SfxTool\SfxPing\bin\Debug\SfxPing.pdb
+F:\gitlab\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.csprojAssemblyReference.cache
+F:\gitlab\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.csproj.CoreCompileInputs.cache
+F:\gitlab\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.exe
+F:\gitlab\SfxTool\SfxTool\SfxPing\obj\Debug\SfxPing.pdb
