@@ -2,6 +2,7 @@
 using SQLite.Utils;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,9 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
     static string databaseName = "SfxFiddlerData.db";
     static string database = String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), databaseName);
     static string dataSource = "data source=" + database;
+    static string ruleSource = "data source=" + String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "SfxFiddlerRule.db");
     static string tableName = "SfxFiddlerLog";
+    static List<SfxFiddlerRule> rules = new List<SfxFiddlerRule>();
     public SfxFiddlerExtension()
     {
         /* NOTE: It's possible that Fiddler UI isn't fully loaded yet, so don't add any UI in the constructor.
@@ -30,9 +33,12 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
         try
         {
             ThreadPool.SetMaxThreads(4, 4);
-            
+            rules = GetRules();
 
-        }catch(Exception ex)
+
+
+        }
+        catch(Exception ex)
         {
             FiddlerApplication.Log.LogString("SfxFiddler自定义插件出错！" + ex.Message + ex.StackTrace);
         }
@@ -198,26 +204,77 @@ public class SfxFiddlerExtension : IAutoTamper // Ensure class is public, or Fid
     }
     private void SendMessage(Session session)
     {
-        try
-        {
-            var keyword = "/MZYSZ/Default.aspx?userSysId=";
+        
             
-            if (session.uriContains(keyword))
+        foreach (var rule in rules)
+        {
+            if (session.uriContains(rule.EndKeyword))
             {
-                var info = keyword ;
-                info += "|"+session.Timers.ServerDoneResponse.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                var info = rule.EndKeyword;
+                info += "|" + session.Timers.ServerDoneResponse.ToString("yyyy-MM-dd HH:mm:ss.fff");
                 info += "|" + session.LocalProcess;
                 info += "|" + session.LocalProcessID;
-                using (TcpClient client = new TcpClient("127.0.0.1", 63351))
+                info += "|" + rule.StartKeyword;
+                try
                 {
-                    client.Client.Send(System.Text.Encoding.UTF8.GetBytes(info));
+                    using (TcpClient client = new TcpClient("127.0.0.1", 63351))
+                    {
+                        client.Client.Send(System.Text.Encoding.UTF8.GetBytes(info));
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    FiddlerApplication.Log.LogString("SfxFiddler自定义插件出错！" + ex.Message + ex.StackTrace);
                 }
             }
-        }catch(Exception ex)
+        }
+           
+       
+    }
+    private List<SfxFiddlerRule> GetRules()
+    {
+        using (var conn = new SQLiteConnection(dataSource))
         {
-            FiddlerApplication.Log.LogString(ex.Message+ex.StackTrace);
+            using (var cmd = new SQLiteCommand())
+            {
+                cmd.Connection = conn;
+                conn.Open();
+                var sh = new SQLiteHelper(cmd);
+                var dt = sh.Select("select * from SfxFiddlerRule");
+                List<SfxFiddlerRule> list = new List<SfxFiddlerRule>();
+                foreach (DataRow row in dt.Rows)
+                {
+                    SfxFiddlerRule rule = new SfxFiddlerRule();
+                    rule.Id = int.Parse(row["Id"].ToString());
+                    rule.RuleName = row["RuleName"].ToString();
+                    rule.StartUrl = row["StartUrl"].ToString();
+                    rule.EndUrl = row["EndUrl"].ToString();
+                    rule.Module = row["Module"].ToString();
+                    rule.Version = row["Version"].ToString();
+                    rule.InsertTime = DateTime.Parse(row["InsertTime"].ToString());
+                    rule.EndKeyword = row["EndKeyword"].ToString();
+                    rule.StartKeyword = row["StartKeyword"].ToString();
+                    list.Add(rule);
+
+                }
+                return list;
+            }
         }
     }
-            
+    public class SfxFiddlerRule
+    {
+        public int Id { get; set; }
+        public string RuleName { get; set; }
+        public string StartUrl { get; set; }
+        public string EndUrl { get; set; }
+        public string StartKeyword { get; set; }
+        public string EndKeyword { get; set; }
+        public string Module { get; set; }
+        public string Version { get; set; }
+        public DateTime InsertTime { get; set; }
+
+    }
+
 }
 

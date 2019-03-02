@@ -16,6 +16,7 @@ namespace SfxProductTimer
     public partial class Form1 : Form
     {
         string dataSource = "data source=" + String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "SfxFiddlerRule.db");
+        string logDataSource = "data source=" + String.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "SfxFiddlerData.db");
         string HISIP = System.Configuration.ConfigurationManager.AppSettings["HISIP"];
         public Form1()
         {
@@ -25,10 +26,10 @@ namespace SfxProductTimer
         private void button1_Click(object sender, EventArgs e)
         {
             var rule = cbRules.SelectedItem as SfxFiddlerRule;
-            test(rule.StartUrl,rule.EndUrl);
+            test(rule.StartUrl, rule.EndUrl);
         }
         bool flagQuit = false;
-       private void test(string initUrl,string finishUrl)
+        private void test(string initUrl, string finishUrl)
         {
             //测试开始
             //打开初始页面
@@ -38,12 +39,12 @@ namespace SfxProductTimer
             if (flagQuit)
             {
                 ie.Quit();
-                ie.
+
             }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            
+
             createTable2();
             LoadRules();
             webSocketServer1.Listen(63351);
@@ -87,7 +88,7 @@ namespace SfxProductTimer
                     var sh = new SQLiteHelper(cmd);
                     var dt = sh.Select("select * from SfxFiddlerRule");
                     List<SfxFiddlerRule> list = new List<SfxFiddlerRule>();
-                    foreach(DataRow row in dt.Rows)
+                    foreach (DataRow row in dt.Rows)
                     {
                         SfxFiddlerRule rule = new SfxFiddlerRule();
                         rule.Id = int.Parse(row["Id"].ToString());
@@ -97,6 +98,8 @@ namespace SfxProductTimer
                         rule.Module = row["Module"].ToString();
                         rule.Version = row["Version"].ToString();
                         rule.InsertTime = DateTime.Parse(row["InsertTime"].ToString());
+                        rule.EndKeyword = row["EndKeyword"].ToString();
+                        rule.StartKeyword = row["StartKeyword"].ToString();
                         rule = replaceIP(rule);
                         list.Add(rule);
 
@@ -115,7 +118,7 @@ namespace SfxProductTimer
         }
         private InternetExplorerDriver openUrl(string url)
         {
-           InternetExplorerOptions options = new InternetExplorerOptions();
+            InternetExplorerOptions options = new InternetExplorerOptions();
             options.IntroduceInstabilityByIgnoringProtectedModeSettings = true;
             InternetExplorerDriver ie = new InternetExplorerDriver(options);
             {
@@ -123,10 +126,10 @@ namespace SfxProductTimer
                 //ie.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(5);
 
             }
-        
+
             ie.Url = url;
             return ie;
-            
+
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -134,11 +137,12 @@ namespace SfxProductTimer
             Environment.Exit(0);
         }
 
-        private void log(string messgage,string action)
+        private void log(string messgage, string action)
         {
             string info = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\t" + action + "\r\n";
             info += messgage + "\r\n";
-            this.Invoke(new Action(() => {
+            this.Invoke(new Action(() =>
+            {
                 this.rbResult.AppendText(info);
             }));
         }
@@ -173,13 +177,42 @@ namespace SfxProductTimer
 
         private void webSocketServer1_OnReceiveMsg(string msg)
         {
-            log(msg, "接收到信息");
+
+            procMsg(msg);
+        }
+        private void procMsg(string msg)
+        {
+            var arr = msg.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            var endKeyword = arr[0];
+            var ServerDoneResponse = arr[1];
+            var LocalProcess = arr[2];
+            var LocalProcessID = arr[3];
+            var startKeyword = arr[4];
+            var endTime = DateTime.Parse(ServerDoneResponse);
+            var startTime = DateTime.Now;
+            using (var conn = new SQLiteConnection(dataSource))
+            {
+                using (var cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    var sh = new SQLiteHelper(cmd);
+                    var dt = sh.Select("select ServerGotRequestTime from SfxFiddlerLog where LocalProcess='"
+                        + LocalProcess + "' and LocalProcessID='" + LocalProcessID 
+                        + "' and StartKeyWord='" + startKeyword+ "'  order by insertTime desc,id limit 0,1");
+                    startTime = DateTime.Parse(dt.Rows[0]["ServerGotRequestTime"].ToString());
+                   
+                }
+            }
+            var duration = endTime - startTime;
+            var info = string.Format("\t请求耗时:\t{0:h\\:mm\\:ss\\.fff}\r\n", duration);
+            log(info, "检测结果：");
         }
     }
 
     public class SfxFiddlerRule
     {
-        public  int Id { get; set; }
+        public int Id { get; set; }
         public string RuleName { get; set; }
         public string StartUrl { get; set; }
         public string EndUrl { get; set; }

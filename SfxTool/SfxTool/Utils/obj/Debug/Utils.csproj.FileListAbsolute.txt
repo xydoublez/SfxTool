@@ -7,3 +7,4 @@ F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.csproj.CoreCompileInputs
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.csproj.CopyComplete
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.dll
 F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.pdb
+F:\gitlab\SfxTool\SfxTool\SfxTool\Utils\obj\Debug\Utils.csprojAssemblyReference.cache
