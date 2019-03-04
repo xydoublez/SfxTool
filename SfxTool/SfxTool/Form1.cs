@@ -82,6 +82,15 @@ namespace SfxTool
         {
             startFiddler();
             startPingIp();
+            startProductTimer();
+        }
+        private void startProductTimer()
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SfxProductTimer.exe");
+            startInfo.WindowStyle = ProcessWindowStyle.Normal;
+            startInfo.Arguments = "/h";
+            Process.Start(startInfo);
         }
         private void startFiddler()
         {
@@ -111,7 +120,17 @@ namespace SfxTool
         {
             KillFiddler();
             KillPing();
+            KillProductTimer();
 
+
+        }
+        private void KillProductTimer()
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = @"C:\Windows\System32\taskkill.exe";
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.Arguments = "/im SfxProductTimer.exe /t /f";
+            Process.Start(startInfo);
         }
         private void KillPing()
         {
@@ -196,11 +215,24 @@ namespace SfxTool
 
         private void button6_Click(object sender, EventArgs e)
         {
+            var fiddler = win32.FindWindow(null, "众阳产品业务流程耗时检测");
+            if (fiddler != IntPtr.Zero)
+            {
+                win32.ShowWindow(fiddler, win32.ShowWindowCommands.Show);
+            }
+            else
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SfxProductTimer.exe");
+                startInfo.WindowStyle = ProcessWindowStyle.Normal;
+                Process.Start(startInfo);
+            }
 
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SfxProductTimer.exe");
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-            Process.Start(startInfo);
+
+        }
+        protected override void DefWndProc(ref Message m)
+        {
+            base.DefWndProc(ref m);
         }
     }
 }

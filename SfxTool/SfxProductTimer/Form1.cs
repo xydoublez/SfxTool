@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace SfxProductTimer
@@ -26,7 +27,8 @@ namespace SfxProductTimer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //kill_IE();
+            kill_IE();
+            Thread.Sleep(1000);
             var rule = cbRules.SelectedItem as SfxFiddlerRule;
             try
             {
@@ -52,8 +54,10 @@ namespace SfxProductTimer
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-
+         
+         
             createTable2();
+            createTable3();
             LoadRules();
             webSocketServer1.Listen(63351);
         }
@@ -78,6 +82,29 @@ namespace SfxProductTimer
                         tb.Columns.Add(new SQLiteColumn("EndKeyword", ColType.Text));
                         tb.Columns.Add(new SQLiteColumn("Module", ColType.Text));
                         tb.Columns.Add(new SQLiteColumn("Version", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("InsertTime", ColType.DateTime));
+                        sh.CreateTable(tb);
+                        conn.Close();
+                    }
+                }
+            }
+        }
+        private void createTable3()
+        {
+            using (var conn = new SQLiteConnection(logDataSource))
+            {
+                using (var cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    var sh = new SQLiteHelper(cmd);
+                    if (!sh.ExistsTable("SfxFiddlerProductLog"))
+                    {
+
+                        var tb = new SQLiteTable("SfxFiddlerProductLog");
+                        tb.Columns.Add(new SQLiteColumn("Id", true));
+                        tb.Columns.Add(new SQLiteColumn("EndKeyword", ColType.Text));
+                        tb.Columns.Add(new SQLiteColumn("duration", ColType.Integer));
                         tb.Columns.Add(new SQLiteColumn("InsertTime", ColType.DateTime));
                         sh.CreateTable(tb);
                         conn.Close();
@@ -143,7 +170,8 @@ namespace SfxProductTimer
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             kill_IE();
-            Environment.Exit(0);
+            e.Cancel = true;
+            this.Hide();
         }
 
         private void log(string messgage, string action)
@@ -221,6 +249,25 @@ namespace SfxProductTimer
             var duration = endTime - startTime;
             var info = string.Format("\t请求耗时:\t{0:h\\:mm\\:ss\\.fff}\r\n", duration);
             log(info, "检测结果：");
+            insertLog(endKeyword, (int)duration.TotalMilliseconds);
+        }
+        private void insertLog(string endKeyword,int duration)
+        {
+            var dic = new Dictionary<string, object>() {
+                { "duration", duration },
+                { "EndKeyword", endKeyword },
+                { "insertTime", DateTime.Now }
+            };
+            using (var conn = new SQLiteConnection(logDataSource))
+            {
+                using (var cmd = new SQLiteCommand())
+                {
+                    cmd.Connection = conn;
+                    conn.Open();
+                    var sh = new SQLiteHelper(cmd);
+                    sh.Insert("SfxFiddlerProductLog", dic);
+                }
+            }
         }
         private void kill_IE()
         {
@@ -234,6 +281,15 @@ namespace SfxProductTimer
             }catch
             {
 
+            }
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length == 2 && args[1] == "/h")
+            {
+                this.Hide();
             }
         }
     }
